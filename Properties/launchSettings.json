@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "import_CSV": {
+      "commandName": "Project",
+      "commandLineArgs": "--database example.db --table foo --file example.csv --separater ,"
+    }
+  }
+}

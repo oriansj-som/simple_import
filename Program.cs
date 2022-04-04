@@ -1,0 +1,83 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+
+namespace import_CSV
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            string tablename = null;
+            string filename = null;
+            bool skip_header = false;
+            string databasename = "example.db";
+            List<string> column_headings = new List<string>();
+            string delim = ",";
+            bool emptyfail = false;
+
+            Console.WriteLine("Starting up");
+            int i = 0;
+            while(i < args.Length )
+            {
+                if(match("--file", args[i]))
+                {
+                    filename = args[i + 1];
+                    i = i + 2;
+                }
+                else if(match("--table", args[i]))
+                {
+                    tablename = args[i + 1];
+                    i = i + 2;
+                }
+                else if (match("--database", args[i]))
+                {
+                    databasename = args[i + 1];
+                    i = i + 2;
+                }
+                else if (match("--separater", args[i]))
+                {
+                    delim = args[i + 1];
+                    i = i + 2;
+                }
+                else if(match("--skip_header", args[i]))
+                {
+                    skip_header = true;
+                }
+                else if (match("--empty-fail", args[i]))
+                {
+                    emptyfail = true;
+                }
+                else if(match("--columns", args[i]))
+                {
+                    i = i + 1;
+                    while( i < args.Length)
+                    {
+                        column_headings.Add(args[i]);
+                        i = i + 1;
+                    }
+                }
+                else
+                {
+                    i = i + 1;
+                }
+            }
+
+            Console.WriteLine(string.Format("Starting import of file: \"{0}\"\nUsing Database: \"{1}\"", filename, databasename));
+            CSV_Import.init(filename, tablename, databasename, skip_header, column_headings, delim, emptyfail);
+            bool l = true;
+            while(l)
+            {
+                l = CSV_Import.read_record();
+            }
+
+            CSV_Import.cleanup();
+            Console.WriteLine(string.Format("import of {0} into {1} successful", filename, tablename));
+        }
+
+        static public bool match(string a, string b)
+        {
+            return a.Equals(b, StringComparison.CurrentCultureIgnoreCase);
+        }
+    }
+}
