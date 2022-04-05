@@ -43,10 +43,22 @@ namespace import_CSV
                 else if(match("--skip_header", args[i]))
                 {
                     skip_header = true;
+                    i = i + 1;
                 }
                 else if (match("--empty-fail", args[i]))
                 {
                     emptyfail = true;
+                    i = i + 1;
+                }
+                else if (match("--verbose", args[i]))
+                {
+                    int index = 0;
+                    foreach(string s in args)
+                    {
+                        Console.WriteLine(string.Format("argument {0}: {1}", index, s));
+                        index = index + 1;
+                    }
+                    i = i + 1;
                 }
                 else if(match("--columns", args[i]))
                 {
